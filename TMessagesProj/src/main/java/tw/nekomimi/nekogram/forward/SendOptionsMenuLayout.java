@@ -26,6 +26,10 @@ public class SendOptionsMenuLayout extends LinearLayout {
     private ActionBarMenuSubItem hideCaptionView;
 
     public SendOptionsMenuLayout(Context parentActivity, ForwardContext forwardContext, boolean showSchedule, boolean showNotify, Delegate delegate, Theme.ResourcesProvider resourcesProvider) {
+        this(parentActivity, forwardContext, showSchedule, showNotify, 0, delegate, resourcesProvider);
+    }
+
+    public SendOptionsMenuLayout(Context parentActivity, ForwardContext forwardContext, boolean showSchedule, boolean showNotify, long dialogId, Delegate delegate, Theme.ResourcesProvider resourcesProvider) {
         super(parentActivity);
         setOrientation(VERTICAL);
 
@@ -192,9 +196,10 @@ public class SendOptionsMenuLayout extends LinearLayout {
                 if (sendPopupWindow != null && sendPopupWindow.isShowing()) {
                     sendPopupWindow.dismiss();
                 }
-                AlertsCreator.createScheduleDatePickerDialog(parentActivity, 0, (notify, scheduleDate) -> {
+                AlertsCreator.createScheduleDatePickerDialog(parentActivity, dialogId, (notify, scheduleDate, scheduleRepeatPeriod) -> {
                     forwardParams.notify = notify;
                     forwardParams.scheduleDate = scheduleDate;
+                    forwardParams.scheduleRepeatPeriod = scheduleRepeatPeriod;
                     delegate.sendMessage();
                 }, resourcesProvider);
             });

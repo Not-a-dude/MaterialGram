@@ -159,8 +159,8 @@ public class QrHelper {
                     bottomSheet.fixNavigationBar(0xff1C2229);
                     bottomSheet.setTitleColor(0xff8A8A8A);
                     bottomSheet.setCalcMandatoryInsets(true);
-                    AndroidUtilities.setNavigationBarColor(bottomSheet.getWindow(), 0xff1C2229, false);
-                    AndroidUtilities.setLightNavigationBar(bottomSheet.getWindow(), false);
+                    AndroidUtilities.setNavigationBarColor(bottomSheet, 0xff1C2229, false);
+                    AndroidUtilities.setLightNavigationBar(bottomSheet, false);
                     bottomSheet.scrollNavBar = true;
                 } else {
                     bottomSheet.show();

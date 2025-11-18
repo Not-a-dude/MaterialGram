@@ -80,7 +80,6 @@ import org.telegram.messenger.MessagesController;
 import org.telegram.messenger.MessagesStorage;
 import org.telegram.messenger.NotificationCenter;
 import org.telegram.messenger.R;
-import org.telegram.messenger.SavedMessagesController;
 import org.telegram.messenger.SendMessagesHelper;
 import org.telegram.messenger.SharedConfig;
 import org.telegram.messenger.UserConfig;
@@ -2284,7 +2283,7 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                     }
                     int result;
                     if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                        SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, scheduleDate, null, false);
+                        SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, scheduleDate, 0, null, false);
                         params.payStars = price == null ? 0 : price;
                         params.monoForumPeer = monoForumPeerId;
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
@@ -2331,15 +2330,15 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         SendMessagesHelper.SendMessageParams params;
                         if (storyItem == null) {
                             if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                                params = SendMessagesHelper.SendMessageParams.of(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, scheduleDate, null, false);
+                                params = SendMessagesHelper.SendMessageParams.of(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, scheduleDate, 0, null, false);
                             } else {
-                                params = SendMessagesHelper.SendMessageParams.of(sendingText[num], key, replyTopMsg, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, null, false);
+                                params = SendMessagesHelper.SendMessageParams.of(sendingText[num], key, replyTopMsg, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, 0, null, false);
                             }
                         } else {
                             if (frameLayout2.getTag() != null && commentTextView.length() > 0 && text[0] != null) {
-                                SendMessagesHelper.getInstance(currentAccount).sendMessage(SendMessagesHelper.SendMessageParams.of(text[0].toString(), key, null, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, null, false));
+                                SendMessagesHelper.getInstance(currentAccount).sendMessage(SendMessagesHelper.SendMessageParams.of(text[0].toString(), key, null, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, 0, null, false));
                             }
-                            params = SendMessagesHelper.SendMessageParams.of(null, key, replyTopMsg, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, null, false);
+                            params = SendMessagesHelper.SendMessageParams.of(null, key, replyTopMsg, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, 0, null, false);
                             params.sendingStory = storyItem;
                         }
                         params.payStars = price == null ? 0 : price;
@@ -2357,12 +2356,12 @@ public class ShareAlert extends BottomSheet implements NotificationCenter.Notifi
                         MessageObject replyTopMsg = topic != null && !isMonoForum ? new MessageObject(currentAccount, topic.topicStartMessage, false, false) : null;
 
                         if (frameLayout2.getTag() != null && commentTextView.length() > 0) {
-                            SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, scheduleDate, null, false);
+                            SendMessagesHelper.SendMessageParams params = SendMessagesHelper.SendMessageParams.of(text[0] == null ? null : text[0].toString(), key, replyTopMsg, replyTopMsg, null, true, entities, null, null, withSound, scheduleDate, 0, null, false);
                             params.payStars = price == null ? 0 : price;
                             params.monoForumPeer = monoForumPeerId;
                             SendMessagesHelper.getInstance(currentAccount).sendMessage(params);
                         }
-                        SendMessagesHelper.SendMessageParams params2 = SendMessagesHelper.SendMessageParams.of(sendingText[num], key, replyTopMsg, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, null, false);
+                        SendMessagesHelper.SendMessageParams params2 = SendMessagesHelper.SendMessageParams.of(sendingText[num], key, replyTopMsg, replyTopMsg, null, true, null, null, null, withSound, scheduleDate, 0, null, false);
                         params2.payStars = price == null ? 0 : price;
                         params2.monoForumPeer = monoForumPeerId;
                         SendMessagesHelper.getInstance(currentAccount).sendMessage(params2);

@@ -1498,7 +1498,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
             }
 
             @Override
-            public void didPressedButton(int button, boolean arg, boolean notify, int scheduleDate, long effectId, boolean invertMedia, boolean forceDocument, long payStars) {
+            public void didPressedButton(int button, boolean arg, boolean notify, int scheduleDate, int scheduleRepeatPeriod, long effectId, boolean invertMedia, boolean forceDocument, long payStars) {
                 try {
                     HashMap<Object, Object> photos = chatAttachAlert.getPhotoLayout().getSelectedPhotos();
                     if (!photos.isEmpty()) {
@@ -3550,7 +3550,7 @@ public class LPhotoPaintView extends SizeNotifierFrameLayoutPhoto implements IPh
         if (emojiView != null) {
             return;
         }
-        emojiView = new EmojiView(null, true, true, false, false, getContext(), false, null, null, true, resourcesProvider, false);
+        emojiView = new EmojiView(null, true, true, false, false, getContext(), false, null, null, true, resourcesProvider, false, false);
         emojiView.allowEmojisForNonPremium(true);
         emojiView.setVisibility(GONE);
         if (AndroidUtilities.isTablet()) {
