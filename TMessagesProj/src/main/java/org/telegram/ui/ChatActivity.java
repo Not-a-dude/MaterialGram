@@ -6708,7 +6708,7 @@ public class ChatActivity extends BaseFragment implements
                             if (isKeyboardVisible()) {
                                 AndroidUtilities.hideKeyboard(getParentActivity().getCurrentFocus());
                             } else if (chatActivityEnterView != null) {
-                                chatActivityEnterView.hidePopup(false);
+                                chatActivityEnterView.hidePopup(true);
                             }
                         }
                         pollHintCell = null;
