@@ -38,7 +38,6 @@ import tw.nekomimi.nekogram.helpers.SettingsHelper;
 public class NekoExperimentalSettingsActivity extends BaseNekoSettingsActivity {
 
     private int experimentRow;
-    private int springAnimationRow;
     private int downloadSpeedBoostRow;
     private int autoInlineBotRow;
     private int forceFontWeightFallbackRow;
@@ -192,18 +191,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoSettingsActivity {
             AlertDialog dialog = builder.create();
             showDialog(dialog);
             dialog.redPositive();
-        } else if (position == springAnimationRow) {
-            ArrayList<String> arrayList = new ArrayList<>();
-            arrayList.add(LocaleController.getString(R.string.NavigationAnimationSpring));
-            arrayList.add(LocaleController.getString(R.string.NavigationAnimationBezier));
-            boolean oldAnimation = NekoConfig.springAnimation;
-            PopupHelper.show(arrayList, LocaleController.getString(R.string.NavigationAnimation), NekoConfig.springAnimation ? 0 : 1, getParentActivity(), view, i -> {
-                NekoConfig.setSpringAnimation(i == 0);
-                listAdapter.notifyItemChanged(springAnimationRow, PARTIAL);
-                if (oldAnimation != NekoConfig.springAnimation) {
-                    showRestartBulletin();
-                }
-            }, resourcesProvider);
         } else if (position == contentRestrictionRow) {
             NekoConfig.toggleIgnoreContentRestriction();
             if (view instanceof TextCheckCell) {
@@ -256,7 +243,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoSettingsActivity {
         super.updateRows();
 
         experimentRow = addRow("experiment");
-        springAnimationRow = addRow("springAnimation");
         downloadSpeedBoostRow = MessagesController.getInstance(currentAccount).getfileExperimentalParams ? -1 : addRow("downloadSpeedBoost");
         autoInlineBotRow = addRow("autoInlineBot");
         forceFontWeightFallbackRow = addRow("forceFontWeightFallback");
@@ -306,14 +292,6 @@ public class NekoExperimentalSettingsActivity extends BaseNekoSettingsActivity {
                                     LocaleController.getString(R.string.DownloadSpeedBoostAverage);
                         };
                         textCell.setTextAndValue(LocaleController.getString(R.string.DownloadSpeedBoost), value, partial, divider);
-                    } else if (position == springAnimationRow) {
-                        String value;
-                        if (NekoConfig.springAnimation) {
-                            value = LocaleController.getString(R.string.NavigationAnimationSpring);
-                        } else {
-                            value = LocaleController.getString(R.string.NavigationAnimationBezier);
-                        }
-                        textCell.setTextAndValue(LocaleController.getString(R.string.NavigationAnimation), value, partial, divider);
                     }
                     break;
                 }
@@ -384,7 +362,7 @@ public class NekoExperimentalSettingsActivity extends BaseNekoSettingsActivity {
         public int getItemViewType(int position) {
             if (position == experiment2Row || position == deleteAccount2Row || (position == data2Row && !AnalyticsHelper.isSettingsAvailable())) {
                 return TYPE_SHADOW;
-            } else if (position == deleteAccountRow || position == downloadSpeedBoostRow || position == springAnimationRow) {
+            } else if (position == deleteAccountRow || position == downloadSpeedBoostRow) {
                 return TYPE_SETTINGS;
             } else if (position > experimentRow && position <= showRPCErrorRow || position == sendBugReportRow) {
                 return TYPE_CHECK;

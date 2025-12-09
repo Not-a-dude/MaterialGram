@@ -145,8 +145,6 @@ public class NekoConfig {
     public static boolean minimizedStickerCreator = false;
     public static boolean hideChannelBottomButtons = false;
 
-    public static boolean springAnimation = false;
-
     public static boolean shouldNOTTrustMe = false;
 
     public static boolean isChineseUser = false;
@@ -237,7 +235,6 @@ public class NekoConfig {
             showOpenIn = preferences.getBoolean("showOpenIn", false);
             hideStories = preferences.getBoolean("hideStories", false);
             quickForward = preferences.getBoolean("quickForward", false);
-            springAnimation = preferences.getBoolean("springAnimation", false);
             reducedColors = preferences.getBoolean("reducedColors", false);
             ignoreContentRestriction = preferences.getBoolean("ignoreContentRestriction", false);
             externalTranslationProvider = preferences.getString("externalTranslationProvider", "");
@@ -494,14 +491,6 @@ public class NekoConfig {
         SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("showOpenIn", showOpenIn);
-        editor.apply();
-    }
-
-    public static void setSpringAnimation(boolean spring) {
-        springAnimation = spring;
-        SharedPreferences preferences = ApplicationLoader.applicationContext.getSharedPreferences("nekoconfig", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("springAnimation", spring);
         editor.apply();
     }
 
