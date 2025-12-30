@@ -20,7 +20,6 @@ import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.ClickableSpan;
 import android.text.style.URLSpan;
-import android.text.util.Linkify;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -139,6 +138,7 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
         fixNavigationBar();
 
         this.reqText = text;
+        this.reqMessageEntities = entities;
         this.reqPeer = peer;
         this.reqMessageId = messageId;
 
@@ -281,15 +281,14 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
     }
 
     public void translate() {
-        Translator.translate(reqText == null ? "" : reqText.toString(), fromLanguage, new Translator.TranslateCallBack() {
+        var textWithEntities = Translator.textWithEntities(reqText == null ? "" : reqText.toString(), reqMessageEntities);
+        Translator.translate(textWithEntities, null, fromLanguage, null, new Translator.TranslateCallBack() {
             @Override
-            public void onSuccess(String translation, String sourceLanguage, String targetLanguage) {
+            public void onSuccess(TLRPC.TL_textWithEntities translation, String sourceLanguage, String targetLanguage) {
                 AndroidUtilities.runOnUIThread(() -> {
                     firstTranslation = false;
-                    CharSequence translated = SpannableStringBuilder.valueOf(translation);
-                    MessageObject.addUrlsByPattern(false, translated, false, 0, 0, true);
-                    translated = preprocessText(translated);
-                    AndroidUtilities.addLinks((Spannable) translated, Linkify.WEB_URLS);
+                    CharSequence translated = SpannableStringBuilder.valueOf(translation.text);
+                    MessageObject.addEntitiesToText(translated, translation.entities, false, true, false, false);
                     translated = preprocessText(translated);
                     textView.setText(translated);
                     headerView.fromLanguageTextView.setText(languageName(fromLanguage = sourceLanguage));
@@ -886,7 +885,7 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
                 );
             }
         }
-        return Emoji.replaceEmoji(spannable, textView.getPaint().getFontMetricsInt(), true);
+        return Emoji.replaceEmoji(spannable, textView.getPaint().getFontMetricsInt(), false);
     }
 
     @Override
@@ -1238,7 +1237,7 @@ public class TranslateAlert2 extends BottomSheet implements NotificationCenter.N
 
             final Runnable[] dismiss = new Runnable[1];
 
-            ArrayList<String> targetLanguages = new ArrayList<>(Translator.getCurrentTranslator().getTargetLanguages());
+            ArrayList<String> targetLanguages = new ArrayList<>(Translator.getCurrentTargetLanguages());
             targetLanguages.add(0, "app");
 
             boolean first = true;

@@ -32740,7 +32740,7 @@ public class ChatActivity extends BaseFragment implements
     }
 
     private void translateOrResetMessage(MessageObject messageObject, View cell, String sourceLanguage) {
-        if (!messageObject.isVoiceTranscriptionOpen() && messageObject.translated) {
+        if (messageObject.translated) {
             getMessageHelper().resetMessageContent(dialog_id, messageObject, false);
         } else {
             translateMessage(messageObject, cell, sourceLanguage);
@@ -32751,23 +32751,36 @@ public class ChatActivity extends BaseFragment implements
         if (messageObject == null || messageObject.translating) {
             return;
         }
-        if (NekoConfig.transType != NekoConfig.TRANS_TYPE_NEKO || messageObject.isVoiceTranscriptionOpen() || messageObject.isSponsored()) {
-            String message = getMessageHelper().getMessagePlainText(messageObject);
-            Translator.showTranslateDialog(getParentActivity(), message, getMessagesController().isChatNoForwards(currentChat) || messageObject.messageOwner.noforwards, this, link -> {
-                didPressMessageUrl(link, false, selectedObject, null);
-                return true;
-            }, sourceLanguage, cell, themeDelegate);
+        var transcription = messageObject.isVoiceTranscriptionOpen();
+        var messageText = transcription ? messageObject.messageOwner.voiceTranscription : messageObject.messageOwner.message;
+        var entities = transcription ? null : messageObject.messageOwner.entities;
+        if (NekoConfig.transType != NekoConfig.TRANS_TYPE_NEKO || messageObject.isSponsored()) {
+            if (!messageObject.isPoll()) {
+                Translator.showTranslateDialog(getParentActivity(), messageText, entities, getMessagesController().isChatNoForwards(currentChat) || messageObject.messageOwner.noforwards, this, link -> {
+                    didPressMessageUrl(link, false, selectedObject, null);
+                    return true;
+                }, sourceLanguage, cell, themeDelegate);
+            } else {
+                String message = getMessageHelper().getMessagePlainText(messageObject);
+                Translator.showTranslateDialog(getParentActivity(), message, getMessagesController().isChatNoForwards(currentChat) || messageObject.messageOwner.noforwards, this, link -> {
+                    didPressMessageUrl(link, false, selectedObject, null);
+                    return true;
+                }, sourceLanguage, cell, themeDelegate);
+            }
             return;
         }
         getMessageHelper().resetMessageContent(dialog_id, messageObject, false, true);
         var pollText = messageObject.messageOwner.media instanceof TLRPC.TL_messageMediaPoll poll ? TranslateController.PollText.fromPoll(poll) : null;
-        Translator.translate(messageObject.messageOwner.message, pollText, sourceLanguage, null, new Translator.TranslateCallBack() {
+        Translator.translate(messageText, entities, pollText, sourceLanguage, null, new Translator.TranslateCallBack() {
             @Override
-            public void onSuccess(String translation, TranslateController.PollText poll, String sourceLanguageT, String targetLanguageT) {
-                var text = translation != null ? Translator.getTLResult(translation, messageObject.messageOwner.message, messageObject.messageOwner.entities) : null;
+            public void onSuccess(TLRPC.TL_textWithEntities translation, TranslateController.PollText poll, String sourceLanguageT, String targetLanguageT) {
                 messageObject.messageOwner.originalLanguage = sourceLanguageT;
                 messageObject.messageOwner.translatedToLanguage = targetLanguageT;
-                messageObject.messageOwner.translatedText = text;
+                if (transcription) {
+                    messageObject.messageOwner.translatedVoiceTranscription = translation;
+                } else {
+                    messageObject.messageOwner.translatedText = translation;
+                }
                 messageObject.messageOwner.translatedPoll = poll;
                 getMessagesStorage().updateMessageCustomParams(messageObject.getDialogId(), messageObject.messageOwner);
                 getMessageHelper().resetMessageContent(dialog_id, messageObject, true);
@@ -44943,7 +44956,7 @@ public class ChatActivity extends BaseFragment implements
                 if (chatMode != MODE_SCHEDULED && NekoConfig.showTranslate && (NekoConfig.transType != NekoConfig.TRANS_TYPE_EXTERNAL || !noforwards)) {
                     MessageObject messageObject = getMessageHelper().getMessageForTranslate(selectedObject, selectedObjectGroup);
                     if (messageObject != null) {
-                        items.add(messageObject.translated && !messageObject.isVoiceTranscriptionOpen() ? LocaleController.getString(R.string.UndoTranslate) : LocaleController.getString(R.string.TranslateMessage));
+                        items.add(messageObject.translated ? LocaleController.getString(R.string.UndoTranslate) : LocaleController.getString(R.string.TranslateMessage));
                         options.add(OPTION_TRANSLATE);
                         icons.add(R.drawable.msg_translate);
                     }

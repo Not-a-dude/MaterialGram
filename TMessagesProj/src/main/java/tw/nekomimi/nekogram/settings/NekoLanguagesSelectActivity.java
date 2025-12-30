@@ -218,7 +218,7 @@ public class NekoLanguagesSelectActivity extends BaseNekoSettingsActivity {
         }
         allLanguages = new ArrayList<>();
         Locale localeEn = Locale.forLanguageTag("en");
-        for (String languageCode : currentType == TYPE_RESTRICTED ? RESTRICTED_LIST : Translator.getCurrentTranslator().getTargetLanguages()) {
+        for (String languageCode : currentType == TYPE_RESTRICTED ? RESTRICTED_LIST : Translator.getCurrentTargetLanguages()) {
             var localeInfo = new LocaleInfo(languageCode);
             Locale locale = Locale.forLanguageTag(languageCode);
             if (!TextUtils.isEmpty(locale.getScript())) {

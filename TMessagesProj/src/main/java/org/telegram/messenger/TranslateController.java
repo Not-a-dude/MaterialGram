@@ -372,7 +372,7 @@ public class TranslateController extends BaseController {
     }
 
     public static ArrayList<Language> getLanguages() {
-        ArrayList<String> targetLanguages = new ArrayList<>(Translator.getCurrentTranslator().getTargetLanguages());
+        ArrayList<String> targetLanguages = new ArrayList<>(Translator.getCurrentTargetLanguages());
         ArrayList<Language> result = new ArrayList<>();
         for (int i = 0; i < targetLanguages.size(); ++i) {
             Language language = new Language();
@@ -893,11 +893,10 @@ public class TranslateController extends BaseController {
             source.entities = message.messageOwner.entities;
         }
 
-        Translator.translate(source.text, null, message.messageOwner.originalLanguage, language, new Translator.TranslateCallBack() {
+        Translator.translate(source, null, message.messageOwner.originalLanguage, language, new Translator.TranslateCallBack() {
             @Override
-            public void onSuccess(String translation, String sourceLanguage, String targetLanguage) {
-                TLRPC.TL_textWithEntities text = Translator.getTLResult(translation, source.text, source.entities);
-                callback.run(isTranscription, text, sourceLanguage, targetLanguage);
+            public void onSuccess(TLRPC.TL_textWithEntities translation, String sourceLanguage, String targetLanguage) {
+                callback.run(isTranscription, translation, sourceLanguage, targetLanguage);
             }
 
             @Override
@@ -1041,7 +1040,7 @@ public class TranslateController extends BaseController {
         Translator.translate(null, pollText, message.messageOwner.originalLanguage, language, new Translator.TranslateCallBack() {
 
             @Override
-            public void onSuccess(String translation, PollText poll, String sourceLanguage, String targetLanguage) {
+            public void onSuccess(TLRPC.TL_textWithEntities translation, PollText poll, String sourceLanguage, String targetLanguage) {
                 callback.run(poll, sourceLanguage, targetLanguage);
             }
 
@@ -1363,12 +1362,11 @@ public class TranslateController extends BaseController {
 
         translatingStories.add(key);
 
-        Translator.translate(storyItem.caption, storyItem.detectedLng, new Translator.TranslateCallBack() {
+        Translator.translate(storyItem.caption, storyItem.entities, null, storyItem.detectedLng, null, new Translator.TranslateCallBack() {
             @Override
-            public void onSuccess(String translation, String sourceLanguage, String targetLanguage) {
-                TLRPC.TL_textWithEntities text = Translator.getTLResult(translation, storyItem.caption, storyItem.entities);
+            public void onSuccess(TLRPC.TL_textWithEntities translation, String sourceLanguage, String targetLanguage) {
                 storyItem.translatedLng = targetLanguage;
-                storyItem.translatedText = text;
+                storyItem.translatedText = translation;
                 getMessagesController().getStoriesController().getStoriesStorage().putStoryInternal(storyItem.dialogId, storyItem);
                 translatingStories.remove(key);
                 if (done != null) {
@@ -1477,13 +1475,12 @@ public class TranslateController extends BaseController {
         translatingPhotos.add(key);
 
         final long start = System.currentTimeMillis();
-        Translator.translate(messageObject.messageOwner.message, captionDetectedLanguage, new Translator.TranslateCallBack() {
+        Translator.translate(messageObject.messageOwner.message, messageObject.messageOwner.entities, null, captionDetectedLanguage, null, new Translator.TranslateCallBack() {
             @Override
-            public void onSuccess(String translation, String sourceLanguage, String targetLanguage) {
-                TLRPC.TL_textWithEntities text = Translator.getTLResult(translation, messageObject.messageOwner.message, messageObject.messageOwner.entities);
+            public void onSuccess(TLRPC.TL_textWithEntities translation, String sourceLanguage, String targetLanguage) {
                 messageObject.messageOwner.originalLanguage = sourceLanguage;
                 messageObject.messageOwner.translatedToLanguage = targetLanguage;
-                messageObject.messageOwner.translatedText = text;
+                messageObject.messageOwner.translatedText = translation;
                 getMessagesStorage().updateMessageCustomParams(key.dialogId, messageObject.messageOwner);
                 translatingPhotos.remove(key);
                 if (done != null) {
