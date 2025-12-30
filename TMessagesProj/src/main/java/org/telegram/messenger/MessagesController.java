@@ -2556,6 +2556,7 @@ public class MessagesController extends BaseController implements NotificationCe
         getNotificationCenter().postNotificationName(NotificationCenter.dialogFiltersUpdated);
     }
 
+    private volatile long lastAppConfigCheckTime;
     private Runnable loadAppConfigRunnable = this::loadAppConfig;
 
     public void loadAppConfig() {
@@ -2563,7 +2564,6 @@ public class MessagesController extends BaseController implements NotificationCe
     }
 
     public void loadAppConfig(boolean force) {
-        AndroidUtilities.cancelRunOnUIThread(loadAppConfigRunnable);
         if (force) {
             appConfigFetcher.forceRequest(currentAccount, 0);
         }
@@ -2571,8 +2571,6 @@ public class MessagesController extends BaseController implements NotificationCe
             if (config != null && config.config instanceof TLRPC.TL_jsonObject) {
                 applyAppConfig((TLRPC.TL_jsonObject) config.config);
             }
-            AndroidUtilities.cancelRunOnUIThread(loadAppConfigRunnable);
-            AndroidUtilities.runOnUIThread(loadAppConfigRunnable, 4 * 60 * 1000 + 10);
         }));
     }
 
@@ -10201,6 +10199,10 @@ public class MessagesController extends BaseController implements NotificationCe
         }
         if (lastPushRegisterSendTime != 0 && Math.abs(SystemClock.elapsedRealtime() - lastPushRegisterSendTime) >= 3 * 60 * 60 * 1000) {
             PushListenerController.sendRegistrationToServer(SharedConfig.pushType, SharedConfig.pushString);
+        }
+        if (Math.abs(currentTime - lastAppConfigCheckTime) >= 4 * 60) {
+            AndroidUtilities.runOnUIThread(loadAppConfigRunnable);
+            lastAppConfigCheckTime = currentTime;
         }
         getLocationController().update();
         checkPromoInfoInternal(false);
