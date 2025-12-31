@@ -19,11 +19,9 @@
     <string name="NoQuoteForwardShort">Χωρίς Αποστολέα</string>
     <string name="NoCaptionForwardShort">Χωρίς Περιγραφή</string>
     <string name="Repeat">Επανάληψη</string>
-    <string name="AddToSavedMessages">Αποθήκευση</string>
+    <string name="AddToSavedMessages">Αποθήκευση Μηνύματος</string>
     <string name="CreateMention">Δημιουργία αναφοράς</string>
     <string name="Prpr">Peropero</string>
-    <string name="EnableResidentNotification">Ενεργ/ση μόνιμης ειδοποίησης</string>
-    <string name="DisableResidentNotification">Απενεργ/ση μόνιμης ειδοποίησης</string>
     <string name="NekogramRunning">Το Nekogram εκτελείται</string>
     <string name="EventType">Εικονιδ πλευρικ μπάρας Αρχικής</string>
     <string name="DependsOnDate">Βάσει ημ/νίας</string>
@@ -32,7 +30,6 @@
     <string name="DeleteDownloadedFile">Διαγρ. ληφθ. αρχείου</string>
     <string name="TestBackendOn">Αυτός ο λογαριασμός θα συνδεθεί με το δοκιμαστικό backend.</string>
     <string name="TestBackendOff">Αυτός ο λογαριασμός θα συνδεθεί με το παραγωγικό backend.</string>
-    <string name="ViewHistory">Προβολή ιστορικού</string>
     <string name="Nya">Μιάου!</string>
     <string name="StickerSize">Μέγεθος αυτοκόλλητου</string>
     <string name="StickerSizeLeft">Μικρό</string>
@@ -313,6 +310,8 @@
     <string name="AutoInlineBotDesc">Αυτόματη αναζήτηση inline bot με βάση το κείμενο του μηνύματος.</string>
     <string name="ShortStandardQuality">SD</string>
     <string name="ForceFontWeightFallback">Εξαναγκασμός επιστροφής βάρους γραμ/σειράς</string>
+    <string name="HideChannelBottomButtons">Απόκρυψη κάτω πλήκτρων καναλιού</string>
+    <string name="TranslationKeepFormatting">Διατήρηση μορφοποίησης κειμένου στη μετάφραση</string>
     <!-- Accessibility -->
     <string name="AccessibilitySettings">Ρυθμίσεις προσβασιμότητας</string>
 </resources>
