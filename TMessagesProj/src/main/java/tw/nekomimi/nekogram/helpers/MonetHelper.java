@@ -109,7 +109,7 @@ public class MonetHelper {
         }
         var context = ApplicationLoader.applicationContext;
         if (rawColor.startsWith("monet")) {
-            var primaryColor = context.getColor(android.R.color.system_accent1_400);
+            var primaryColor = context.getColor(android.R.color.system_accent1_500);
             if (rawColor.startsWith("monetRed")) {
                 return adaptHue(primaryColor, Color.RED);
             } else {

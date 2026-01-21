@@ -61,13 +61,23 @@ android {
         variant.outputs.configureEach { output ->
             def abi = output.getFilter('ABI')
             if (abi == null) abi = 'universal'
-            outputFileName = "Nekogram-${defaultConfig.versionName}-${defaultConfig.versionCode}-${abi}.apk"
+            outputFileName = "Materialgram-${defaultConfig.versionName}-${defaultConfig.versionCode}-${abi}.apk"
             output.versionCodeOverride = defaultConfig.versionCode * 10
         }
     }
 
     defaultConfig {
         versionName APP_VERSION_NAME
+
+        ndk {
+            abiFilters "arm64-v8a", "x86_64"
+        }
+
+        externalNativeBuild {
+            cmake {
+                abiFilters "arm64-v8a", "x86_64"
+            }
+        }
 
         multiDexEnabled true
     }
@@ -84,7 +94,7 @@ android {
         universalApk true
 
         reset()
-        include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        include "arm64-v8a", "x86_64"
     }
     namespace 'org.telegram.messenger.regular'
 

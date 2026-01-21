@@ -3,9 +3,9 @@
 #ifdef NDEBUG
 #define LOG_DISABLED
 #endif
-#define PACKAGE_NAME "tw.nekomimi.nekogram"_iobfs.c_str()
-#define CERT_HASH 0x693cc8c5
-#define CERT_SIZE 0x2d7
+#define PACKAGE_NAME "com.dude.materialgram"_iobfs.c_str()
+#define CERT_HASH 0xae74a009
+#define CERT_SIZE 0x37d
 
 #ifdef __cplusplus
 extern "C" {
