@@ -95,10 +95,7 @@ class MediaCodecUtils {
   }
 
   static boolean isHardwareAccelerated(MediaCodecInfo info) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       return isHardwareAcceleratedQOrHigher(info);
-    }
-    return !isSoftwareOnly(info);
   }
 
   @TargetApi(29)
@@ -107,16 +104,7 @@ class MediaCodecUtils {
   }
 
   static boolean isSoftwareOnly(android.media.MediaCodecInfo codecInfo) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       return isSoftwareOnlyQOrHigher(codecInfo);
-    }
-    String name = codecInfo.getName();
-    for (String prefix : SOFTWARE_IMPLEMENTATION_PREFIXES) {
-      if (name.startsWith(prefix)) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @TargetApi(29)

@@ -151,12 +151,8 @@ public class EmojiHelper {
         }
         try {
             Typeface typeface;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                typeface = new Typeface.Builder(path)
-                        .build();
-            } else {
-                typeface = Typeface.createFromFile(path);
-            }
+            typeface = new Typeface.Builder(path)
+                    .build();
             return typeface != null && !typeface.equals(Typeface.DEFAULT);
         } catch (Exception ignored) {
             return false;

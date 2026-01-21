@@ -33,44 +33,11 @@ public final class StorageManagerCompat {
 
     @NonNull
     public ParcelFileDescriptor openProxyFileDescriptor(int mode, @NonNull ProxyFileDescriptorCallbackCompat callback, @NonNull Handler handler) throws IOException {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            return mStorageManager.openProxyFileDescriptor(
-                    mode,
-                    callback.toAndroidOsProxyFileDescriptorCallback(),
-                    handler
-            );
-        } else {
-            if (ParcelFileDescriptor.MODE_READ_ONLY != mode) {
-                throw new UnsupportedOperationException("Mode " + mode + " is not supported");
-            }
-
-            ParcelFileDescriptor[] pipe = ParcelFileDescriptor.createReliablePipe();
-            handler.post(() -> {
-                try (final ParcelFileDescriptor.AutoCloseOutputStream os =
-                             new ParcelFileDescriptor.AutoCloseOutputStream(pipe[1])) {
-                    long offset = 0;
-                    byte[] buffer = new byte[4 * 1024];
-                    while (true) {
-                        int size = callback.onRead(offset, buffer.length, buffer);
-                        if (size == 0) {
-                            break;
-                        }
-                        offset += size;
-                        os.write(buffer, 0, size);
-                    }
-                    callback.onRelease();
-                } catch (IOException | ErrnoException e) {
-                    Log.e(TAG, "Failed to read file.", e);
-
-                    try {
-                        pipe[1].closeWithError(e.getMessage());
-                    } catch (IOException exc) {
-                        Log.e(TAG, "Can't even close PFD with error.", exc);
-                    }
-                }
-            });
-            return pipe[0];
-        }
+        return mStorageManager.openProxyFileDescriptor(
+                mode,
+                callback.toAndroidOsProxyFileDescriptorCallback(),
+                handler
+        );
     }
 
     public static abstract class ProxyFileDescriptorCallbackCompat {

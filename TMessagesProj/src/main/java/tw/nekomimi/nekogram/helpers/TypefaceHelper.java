@@ -55,19 +55,7 @@ public class TypefaceHelper {
     }
 
     public static Typeface getSystemEmojiTypeface() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            return null;
-        }
-        if (!loadSystemEmojiFailed && systemEmojiTypeface == null) {
-            var font = getSystemEmojiFontPathLegacy();
-            if (font != null) {
-                systemEmojiTypeface = Typeface.createFromFile(font);
-            }
-            if (systemEmojiTypeface == null) {
-                loadSystemEmojiFailed = true;
-            }
-        }
-        return systemEmojiTypeface;
+        return null;
     }
 
     private static File getSystemEmojiFontPathLegacy() {
@@ -108,10 +96,7 @@ public class TypefaceHelper {
     }
 
     public static Typeface createTypeface(boolean bold, boolean italic) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            return Typeface.create(null, bold ? 500 : 400, italic);
-        }
-        return Typeface.create(bold ? "sans-serif-medium" : "sans-serif", italic ? Typeface.ITALIC : Typeface.NORMAL);
+        return Typeface.create(null, bold ? 500 : 400, italic);
     }
 
     public static boolean isMediumWeightSupported() {

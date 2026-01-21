@@ -197,10 +197,8 @@ public class FactorAnimator {
 
     long duration = this.duration;
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      if (!ValueAnimator.areAnimatorsEnabled()) {
+    if (!ValueAnimator.areAnimatorsEnabled()) {
         duration = 0;
-      }
     }
 
     if (duration <= 0) {

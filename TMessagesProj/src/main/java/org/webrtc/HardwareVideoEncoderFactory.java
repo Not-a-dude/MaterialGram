@@ -191,22 +191,7 @@ public class HardwareVideoEncoderFactory implements VideoEncoderFactory {
   // Returns true if the given MediaCodecInfo indicates a hardware module that is supported on the
   // current SDK.
   private boolean isHardwareSupportedInCurrentSdk(MediaCodecInfo info, VideoCodecMimeType type) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
       return info.isHardwareAccelerated();
-    }
-
-    switch (type) {
-      case VP8:
-        return isHardwareSupportedInCurrentSdkVp8(info);
-      case VP9:
-        return isHardwareSupportedInCurrentSdkVp9(info);
-      case H264:
-        return isHardwareSupportedInCurrentSdkH264(info);
-      case H265:
-      case AV1:
-        return false;
-    }
-    return false;
   }
 
   private boolean isHardwareSupportedInCurrentSdkVp8(MediaCodecInfo info) {

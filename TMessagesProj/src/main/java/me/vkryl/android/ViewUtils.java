@@ -37,26 +37,12 @@ public final class ViewUtils {
   @SuppressWarnings("deprecation")
   public static void setBackground (View view, Drawable drawable) {
     if (view != null) {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
         view.setBackground(drawable);
-      } else {
-        view.setBackgroundDrawable(drawable);
-      }
     }
   }
 
   public static String getActionName (MotionEvent e) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
       return MotionEvent.actionToString(e.getAction());
-    } else {
-      switch (e.getAction()) {
-        case MotionEvent.ACTION_DOWN: return "ACTION_DOWN";
-        case MotionEvent.ACTION_UP: return "ACTION_UP";
-        case MotionEvent.ACTION_MOVE: return "ACTION_MOVE";
-        case MotionEvent.ACTION_CANCEL: return "ACTION_CANCEL";
-      }
-      return "ACTION:" + e.getAction();
-    }
   }
 
   public static void runJustBeforeBeingDrawn (final View view, final Runnable runnable) {

@@ -459,9 +459,7 @@ public abstract class BaseNekoSettingsActivity extends BaseFragment {
 
     @Override
     public void onProvideAssistContent(AssistContent outContent) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            outContent.setWebUri(Uri.parse("https://nekogram.app"));
-        }
+        outContent.setWebUri(Uri.parse("https://nekogram.app"));
     }
 
     @Override

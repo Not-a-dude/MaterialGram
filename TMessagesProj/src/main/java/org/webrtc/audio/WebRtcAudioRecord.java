@@ -311,7 +311,6 @@ public class WebRtcAudioRecord {
     int bufferSizeInBytes = Math.max(BUFFER_SIZE_FACTOR * minBufferSize, byteBuffer.capacity());
     Logging.d(TAG, "bufferSizeInBytes: " + bufferSizeInBytes);
     try {
-      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         // Use the AudioRecord.Builder class on Android M (23) and above.
         // Throws IllegalArgumentException.
         audioRecord = createAudioRecordOnMOrHigher(
@@ -320,13 +319,6 @@ public class WebRtcAudioRecord {
         if (preferredDevice != null) {
           setPreferredDevice(preferredDevice);
         }
-      } else {
-        // Use the old AudioRecord constructor for API levels below 23.
-        // Throws UnsupportedOperationException.
-        audioRecord = createAudioRecordOnLowerThanM(
-            audioSource, sampleRate, channelConfig, audioFormat, bufferSizeInBytes);
-        audioSourceMatchesRecordingSessionRef.set(null);
-      }
     } catch (IllegalArgumentException | UnsupportedOperationException e) {
       // Report of exception message is sufficient. Example: "Cannot create AudioRecord".
       reportWebRtcAudioRecordInitError(e.getMessage());
@@ -448,23 +440,17 @@ public class WebRtcAudioRecord {
 
   @TargetApi(Build.VERSION_CODES.M)
   private void logMainParametersExtended() {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       Logging.d(TAG,
-          "AudioRecord: "
-              // The frame count of the native AudioRecord buffer.
-              + "buffer size in frames: " + audioRecord.getBufferSizeInFrames());
-    }
+              "AudioRecord: "
+                      // The frame count of the native AudioRecord buffer.
+                      + "buffer size in frames: " + audioRecord.getBufferSizeInFrames());
   }
 
   @TargetApi(Build.VERSION_CODES.N)
   // Checks the number of active recording sessions and logs the states of all active sessions.
   // Returns number of active sessions. Note that this could occur on arbituary thread.
   private int logRecordingConfigurations(AudioRecord audioRecord, boolean verifyAudioConfig) {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-      Logging.w(TAG, "AudioManager#getActiveRecordingConfigurations() requires N or higher");
-      return 0;
-    }
-    if (audioRecord == null) {
+      if (audioRecord == null) {
       return 0;
     }
 

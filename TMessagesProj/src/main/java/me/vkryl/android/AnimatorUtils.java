@@ -50,11 +50,7 @@ public final class AnimatorUtils {
   }
 
   public static float getFraction (ValueAnimator animator) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
       return animator.getAnimatedFraction();
-    } else {
-      return (Float) animator.getAnimatedValue();
-    }
   }
 
   public static void startAnimator (final View view, final Animator animator) {

@@ -65,9 +65,7 @@ public final class ApkInstaller {
 
         var installer = context.getPackageManager().getPackageInstaller();
         var params = new PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            params.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED);
-        }
+        params.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED);
         try (PackageInstaller.Session session = installer.openSession(installer.createSession(params))) {
             OutputStream out = session.openWrite(apk.getName(), 0, apk.length());
             try (var in = new FileInputStream(apk); out) {
